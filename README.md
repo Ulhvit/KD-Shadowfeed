@@ -22,9 +22,9 @@ For demonstration purposes, the repo will include **synthetic sample data** (`ex
 
 ## TODO
 
-I step: Process the data and create a database (~20% done)
-II step: Prepare example database for demonstration purposes 
-III step: Plan approach to data analysis
-IV step: Analyze the data
-V step: Prepare example data visualization graphics for demonstration purposes
+- [ ] I step: Process the data and create a database (~20% done)
+- [ ] II step: Prepare example database for demonstration purposes 
+- [ ] III step: Plan approach to data analysis
+- [ ] IV step: Analyze the data
+- [ ] V step: Prepare example data visualization graphics for demonstration purposes
 
