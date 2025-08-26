@@ -18,7 +18,26 @@ SHADOWFEED_SQL_DB = "/home/ulhvit/Storage/KD-Shadowfeed/KD-Shadowfeed/db/yt_watc
 #cur = con.cursor()
 
 ### Functions ###
+#@profile
 def extract_watch_data(WATCH_HIST):
+    ''' 
+
+    Parameters
+    ----------
+    WATCH_HIST : TYPE string - path to html file
+        Parses an HTML tree to extract text and links from a specific section.
+
+        Iterates over a target set of <div> elements, collects text 
+        withing tags and the first hyperlink, and returns the results as a list. 
+        Frees processed nodes from memory to reduce overhead 
+        when handling large documents.
+
+    Yields
+    ------
+    list_for_sql : TYPE list
+        list of 5 elements, containing a link and 4 unprocessed strings 
+
+    '''
     target_class = "content-cell mdl-cell mdl-cell--6-col mdl-typography--body-1"
     context = etree.iterparse(WATCH_HIST, html=True, tag="div")
     for _, thing in context:
