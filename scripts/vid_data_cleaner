@@ -1,0 +1,46 @@
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+"""
+Created on Mon Sep  1 12:29:26 2025
+
+@author: ulhvit
+"""
+
+import unicodedata
+import re
+
+def sanitize_text(string_):
+    if not string_:
+        return None
+    string_ = unicodedata.normalize("NFKD", string_)
+    string_ = string_.encode("ascii", "ignore").decode("ascii")
+    string_ = re.sub(r"[\x00-\x1F\x7F]", "", string_)
+    string_ = re.sub(r"\s+", " ", string_)
+    return string_.strip()
+
+def clean_entry(entry):
+    entry = [sanitize_text(string_) for string_ in entry if string_ and string_.strip()]
+    entry = [string_ for string_ in entry if not string_.lower().startswith("obejrzano")]
+
+    link, title, channel, timestamp_str = entry
+
+    month_map = {
+        "sty": "01", "lut": "02", "mar": "03", "kwi": "04",
+        "maj": "05", "cze": "06", "lip": "07", "sie": "08",
+        "wrz": "09", "paz": "10", "lis": "11", "gru": "12"
+    }
+
+    match = re.match(r"(\d{1,2}) (\w{3}) (\d{4}), (\d{2}:\d{2}:\d{2})", timestamp_str)
+    if match:
+        day, mon_abbr, year, time_str = match.groups()
+        month = month_map[mon_abbr.lower()]
+        watched_at = f"{year}-{month}-{int(day):02d} {time_str}"
+    else:
+        watched_at = None
+
+    return (
+        sanitize_text(link),
+        sanitize_text(title),
+        sanitize_text(channel),
+        sanitize_text(watched_at)
+    )

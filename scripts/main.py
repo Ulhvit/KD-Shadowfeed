@@ -52,5 +52,4 @@ def extract_watch_data(WATCH_HIST):
         while thing.getprevious() is not None: # Remove references to all previous siblings of the element
             del thing.getparent()[0]
     del context
-    
 ### main ###
