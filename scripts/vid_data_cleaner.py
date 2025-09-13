@@ -9,14 +9,43 @@ Created on Mon Sep  1 12:29:26 2025
 import unicodedata
 import re
 
-def sanitize_text(string_):
-    if not string_:
+# Regex to remove emoji / symbols outside the BMP
+_EMOJI_PATTERN = re.compile( ## IMPORTANT: CHECK RANGES, they don't seem okay
+    "["
+    "\U0001F600-\U0001F64F"  # emoticons
+    "\U0001F300-\U0001F5FF"  # symbols & pictographs
+    "\U0001F680-\U0001F6FF"  # transport & map symbols
+    "\U0001F1E0-\U0001F1FF"  # flags (iOS)
+    "\U00002702-\U000027B0"  # dingbats
+    "\U000024C2-\U0001F251"  # enclosed characters
+    "]+",
+    flags=re.UNICODE
+)
+
+def sanitize_text(s: str) -> str | None:
+    """
+    Clean a string so it's safe for database insertion:
+    - Normalize Unicode
+    - Remove emojis
+    - Remove control/non-printable chars
+    - Collapse spaces
+    """
+    if not s:
         return None
-    string_ = unicodedata.normalize("NFKD", string_)
-    string_ = string_.encode("ascii", "ignore").decode("ascii")
-    string_ = re.sub(r"[\x00-\x1F\x7F]", "", string_)
-    string_ = re.sub(r"\s+", " ", string_)
-    return string_.strip()
+
+    # Normalize accents, weird forms (e.g. fullwidth chars)
+    s = unicodedata.normalize("NFKC", s)
+
+    # Remove emoji
+    s = _EMOJI_PATTERN.sub("", s)
+
+    # Remove control chars / non-printable
+    s = re.sub(r"[\x00-\x1F\x7F]", "", s)
+
+    # Collapse whitespace
+    s = re.sub(r"\s+", " ", s)
+
+    return s.strip()
 
 def clean_entry(entry):
     entry = [sanitize_text(string_) for string_ in entry if string_ and string_.strip()]
