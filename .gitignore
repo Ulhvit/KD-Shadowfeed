@@ -3,3 +3,7 @@ db/
 .jupyter/
 .spyproject/
 .ipynb_checkpoints/
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
