@@ -73,12 +73,12 @@ def watched_at_datetime_conversion(timestamp_str):
         "maj": "05", "cze": "06", "lip": "07", "sie": "08",
         "wrz": "09", "paz": "10", "lis": "11", "gru": "12"
     }
-    match = re.match(r"(\d{1,2}) (\w{3}) (\d{4}), (\d{2}:\d{2}:\d{2})", timestamp_str)
-    if match:
-        day, mon_abbr, year, time_str = match.groups()
+    match_ = re.match(r"(\d{1,2}) (\w{3}) (\d{4}), (\d{2}:\d{2}:\d{2})", timestamp_str)
+    if match_:
+        day, mon_abbr, year, time_str = match_.groups()
         month = month_map[mon_abbr.lower()]
         #int(day):02d for making sure 0 is included for proper datetime
-        #month 0 padding is covered from the month_map
+        #padding 0 for months is covered from the month_map
         watched_at_clean = f"{year}-{month}-{int(day):02d} {time_str}" 
     else:
         watched_at_clean = None #for failed cleaning/mapping
