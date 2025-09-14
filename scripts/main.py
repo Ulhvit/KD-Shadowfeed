@@ -44,8 +44,11 @@ def extract_watch_data(WATCH_HIST):
         if thing.attrib.get("class", "").strip() == target_class:
             first_a = thing.find(".//a")
             watched_vid_link = first_a.attrib.get("href",'')
-            text_in_cell = list(thing.itertext())
-            list_for_sql = [watched_vid_link] + text_in_cell
+            text_in_cell = [text_ for text_ in thing.itertext()]
+            while len(text_in_cell) < 4:
+                text_in_cell.insert(-1, None)
+            # [1:] to skip "obejrzano/watched"
+            list_for_sql = text_in_cell[1:] + [watched_vid_link] 
             yield list_for_sql
     # ---------------- MEMORY CLEANS -----------------
         thing.clear() # Clear the current element's children.

@@ -23,7 +23,7 @@ _EMOJI_PATTERN = re.compile(
     "]+",
     flags=re.UNICODE
 )
-
+### SECONDARY / SUPPLEMENT FUNCTIONS ###
 def sanitize_text(s):
     """
     Remove emojis and non-printable junk, normalize unicode, collapse whitespace.
@@ -33,7 +33,7 @@ def sanitize_text(s):
         return None
 
     # Normalize Unicode forms (compat/composed)
-    s = unicodedata.normalize("NFKC", s)
+    s = unicodedata.normalize("NFKC", s).encode("ascii", "ignore").decode("ascii")
 
     # Remove emoji characters (covers many emoji blocks, including the brain)
     s = _EMOJI_PATTERN.sub("", s)
@@ -84,18 +84,13 @@ def watched_at_datetime_conversion(timestamp_str):
         watched_at_clean = None #for failed cleaning/mapping
     return watched_at_clean
 
+### MAIN FUNCTION ###
+
 def clean_entry(entry):
     #Sanitize entry
-    entry = [sanitize_text(string_) for string_ in entry if string_]
-    #Get rid of "Obejrzano"
-    entry = [s for s in entry if not s.lower().startswith("obejrzano")]
-    link, title, channel, timestamp_str = entry
-    #date conversion mapping
-    watched_at_clean = watched_at_datetime_conversion(timestamp_str)
-    #end of date conversion mapping. Returns tuple
-    return (
-        title,
-        channel,
-        watched_at_clean,
-        link
-    )
+    entry = [sanitize_text(string_) for string_ in entry]
+    
+    #Date conversion mapping
+    entry[-2] = watched_at_datetime_conversion(entry[-2])
+    
+    return tuple(entry)
