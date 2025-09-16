@@ -7,38 +7,31 @@ Created on Sun Sep 14 20:29:37 2025
 """
 import sqlite3
 
-DATABASE_PATH = "/home/ulhvit/Storage/KD-Shadowfeed/KD-Shadowfeed/db/yt_watch_history.db"
 
 ### Connect to SQL ###
-def create_db():
+class manage_db:
+    def __init__(self, path_to_db):
+        self.con = sqlite3.connect(path_to_db)
+        self.cur = self.con.cursor()
+        self.cur.execute("""
+        CREATE TABLE IF NOT EXISTS yt_watch_hist (
+        title TEXT,
+        channel TEXT,
+        timestamp DATETIME,
+        link TEXT,
+        UNIQUE (timestamp, link)
+        )
+        """)
 
-    con = sqlite3.connect(DATABASE_PATH)
-    cur = con.cursor()
-
-    # create table
-    cur.execute("""
-    CREATE TABLE IF NOT EXISTS yt_watch_hist (
-    title TEXT,
-    channel TEXT,
-    timestamp DATETIME,
-    link TEXT
-    UNIQUE (timestamp)
-    )
-    """)
-
-    con.commit()
-    con.close()
+    def insert_row(self, tuple_row):        
+        self.cur.execute("""
+        INSERT OR IGNORE INTO yt_watch_hist (title, channel, timestamp, link)
+        VALUES (?, ?, ?, ?)
+        """, tuple_row)
+        
+    def commit_(self):
+        self.con.commit()
     
-
-def insert_row(tuple_row):
-    
-    con = sqlite3.connect(DATABASE_PATH)
-    cur = con.cursor()
-    
-    cur.execute("""
-    INSERT INTO yt_watch_hist (title channel timestamp link)
-    VALUES (?, ?, ?, ?))
-    """, tuple_row)
-    
-    con.commit()
-    con.close()
+    def close_conn(self):
+        self.con.commit() #just in case
+        self.con.close()
