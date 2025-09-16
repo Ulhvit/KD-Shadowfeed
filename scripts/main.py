@@ -29,4 +29,3 @@ sql_db.commit_()
 sql_db.close_conn()
 
 print("Database ready")
-    
