@@ -5,17 +5,11 @@ Created on Sun Aug 24 19:18:55 2025
 
 @author: ulhvit
 """
-from datetime import datetime
 from lxml import etree
-import dateparser
-import sqlite3
 
 ### Paths ### 
 WATCH_HIST = "/home/ulhvit/Storage/KD-Shadowfeed/KD-Shadowfeed/data/watch_hist.html"
 SHADOWFEED_SQL_DB = "/home/ulhvit/Storage/KD-Shadowfeed/KD-Shadowfeed/db/yt_watch_history.db"
-### Connect to SQL ###
-#con = sqlite3.connect("/home/ulhvit/Storage/KD-Shadowfeed/KD-Shadowfeed/db/yt_watch_history.db")
-#cur = con.cursor()
 
 ### Functions ###
 #@profile
@@ -55,4 +49,3 @@ def extract_watch_data(WATCH_HIST):
         while thing.getprevious() is not None: # Remove references to all previous siblings of the element
             del thing.getparent()[0]
     del context
-### main ###
