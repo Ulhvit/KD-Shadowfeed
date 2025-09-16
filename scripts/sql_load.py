@@ -10,7 +10,7 @@ import sqlite3
 DATABASE_PATH = "/home/ulhvit/Storage/KD-Shadowfeed/KD-Shadowfeed/db/yt_watch_history.db"
 
 ### Connect to SQL ###
-def connect_sql():
+def create_db():
 
     con = sqlite3.connect(DATABASE_PATH)
     cur = con.cursor()
@@ -22,6 +22,7 @@ def connect_sql():
     channel TEXT,
     timestamp DATETIME,
     link TEXT
+    UNIQUE (timestamp)
     )
     """)
 

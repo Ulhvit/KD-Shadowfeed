@@ -7,10 +7,6 @@ Created on Sun Aug 24 19:18:55 2025
 """
 from lxml import etree
 
-### Paths ### 
-WATCH_HIST = "/home/ulhvit/Storage/KD-Shadowfeed/KD-Shadowfeed/data/watch_hist.html"
-SHADOWFEED_SQL_DB = "/home/ulhvit/Storage/KD-Shadowfeed/KD-Shadowfeed/db/yt_watch_history.db"
-
 ### Functions ###
 #@profile
 def extract_watch_data(WATCH_HIST):
