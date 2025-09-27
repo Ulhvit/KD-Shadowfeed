@@ -29,7 +29,7 @@ def sanitize_text(s):
     Remove emojis and non-printable junk, normalize unicode, collapse whitespace.
     Returns None for false input.
     """
-    if not s:
+    if not s: # TODO: this return seems like a wrong way to do it
         return None
 
     # Normalize Unicode forms (compat/composed)

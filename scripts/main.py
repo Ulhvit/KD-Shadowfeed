@@ -11,14 +11,22 @@ from vid_data_cleaner import clean_entry
 
 ### Paths ### 
 WATCH_HIST = "/home/ulhvit/Storage/KD-Shadowfeed/KD-Shadowfeed/data/watch_hist.html"
+WATCH_HIST_2 = "/home/ulhvit/Storage/KD-Shadowfeed/KD-Shadowfeed/data/watch_hist_2.html"
 WATCH_HIST_DB = "/home/ulhvit/Storage/KD-Shadowfeed/KD-Shadowfeed/db/yt_watch_history.db"
 ### ETL PIPELINE ###
 
 sql_db = sqll.manage_db(WATCH_HIST_DB)
 count = 0
 batch_size = 100
-
+# TODO: picking the file from which to add to db
 for data_row in extract_from_html.extract_watch_data(WATCH_HIST):
+    cleaned_data_row = clean_entry(data_row)
+    sql_db.insert_row(cleaned_data_row)
+    count+=1
+    if count % batch_size == 0:
+        sql_db.commit_()
+
+for data_row in extract_from_html.extract_watch_data(WATCH_HIST_2):
     cleaned_data_row = clean_entry(data_row)
     sql_db.insert_row(cleaned_data_row)
     count+=1
